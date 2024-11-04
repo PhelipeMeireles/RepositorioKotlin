@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <EditText
+        android:id="@+id/editTextNota1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Nota 1"
+        android:inputType="numberDecimal" />
+
+    <EditText
+        android:id="@+id/editTextNota2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Nota 2"
+        android:inputType="numberDecimal" />
+
+    <EditText
+        android:id="@+id/editTextNota3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Nota 3"
+        android:inputType="numberDecimal" />
+
+    <Button
+        android:id="@+id/buttonCalcularMedia"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Calcular Média" />
+
+    <TextView
+        android:id="@+id/textViewResultado"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:textSize="18sp" />
+
+</LinearLayout>
+
+
+package com.example.calculomedia
+
+import android.os.Bundle
+import android.widget.Button
+import android.widget.EditText
+import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+
+class MainActivity : AppCompatActivity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        val editTextNota1 = findViewById<EditText>(R.id.editTextNota1)
+        val editTextNota2 = findViewById<EditText>(R.id.editTextNota2)
+        val editTextNota3 = findViewById<EditText>(R.id.editTextNota3)
+        val buttonCalcularMedia = findViewById<Button>(R.id.buttonCalcularMedia)
+        val textViewResultado = findViewById<TextView>(R.id.textViewResultado)
+
+        buttonCalcularMedia.setOnClickListener {
+            val nota1 = editTextNota1.text.toString().toFloatOrNull()
+            val nota2 = editTextNota2.text.toString().toFloatOrNull()
+            val nota3 = editTextNota3.text.toString().toFloatOrNull()
+
+            if (nota1 != null && nota2 != null && nota3 != null) {
+                val media = (nota1 + nota2 + nota3) / 3
+
+                val resultado = when {
+                    media >= 7.0 -> "Aprovado"
+                    media in 5.0..6.9 -> "Recuperação"
+                    else -> "Reprovado"
+                }
+                textViewResultado.text = "Média: ${String.format("%.2f", media)} - $resultado"
+            } else {
+                textViewResultado.text = "Por favor, insira todas as notas."
+            }
+        }
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <EditText
+        android:id="@+id/editTextRenda"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Renda mensal"
+        android:inputType="numberDecimal" />
+
+    <Button
+        android:id="@+id/buttonCalcularImposto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Calcular Imposto" />
+
+    <TextView
+        android:id="@+id/textViewResultado"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:textSize="18sp" />
+
+</LinearLayout>
+
+
+package com.example.calculoimpostoderenda
+
+import android.os.Bundle
+import android.widget.Button
+import android.widget.EditText
+import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+
+class MainActivity : AppCompatActivity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        val editTextRenda = findViewById<EditText>(R.id.editTextRenda)
+        val buttonCalcularImposto = findViewById<Button>(R.id.buttonCalcularImposto)
+        val textViewResultado = findViewById<TextView>(R.id.textViewResultado)
+
+        buttonCalcularImposto.setOnClickListener {
+            val renda = editTextRenda.text.toString().toFloatOrNull()
+
+            if (renda != null) {
+                val imposto = when {
+                    renda <= 1903.98 -> 0.0
+                    renda <= 2826.65 -> renda * 0.075
+                    renda <= 3751.05 -> renda * 0.15
+                    renda <= 4664.68 -> renda * 0.225
+                    else -> renda * 0.275
+                }
+                textViewResultado.text = "Imposto a pagar: R$ ${String.format("%.2f", imposto)}"
+            } else {
+                textViewResultado.text = "Por favor, insira uma renda válida."
+            }
+        }
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+package com.example.calculodesconto
+
+import android.os.Bundle
+import android.widget.Button
+import android.widget.EditText
+import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+
+class MainActivity : AppCompatActivity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        val editTextPreco = findViewById<EditText>(R.id.editTextPreco)
+        val editTextDesconto = findViewById<EditText>(R.id.editTextDesconto)
+        val buttonCalcularDesconto = findViewById<Button>(R.id.buttonCalcularDesconto)
+        val textViewResultado = findViewById<TextView>(R.id.textViewResultado)
+
+        buttonCalcularDesconto.setOnClickListener {
+            val preco = editTextPreco.text.toString().toFloatOrNull()
+            val desconto = editTextDesconto.text.toString().toFloatOrNull()
+
+            if (preco != null && desconto != null) {
+                val valorDesconto = preco * (desconto / 100)
+                val precoFinal = preco - valorDesconto
+
+                textViewResultado.text = "Preço final: R$ ${String.format("%.2f", precoFinal)}"
+            } else {
+                textViewResultado.text = "Por favor, insira valores válidos."
+            }
+        }
+    }
+}
+
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <EditText
+        android:id="@+id/editTextPreco"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Preço do produto"
+        android:inputType="numberDecimal" />
+
+    <EditText
+        android:id="@+id/editTextDesconto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Desconto (%)"
+        android:inputType="numberDecimal" />
+
+    <Button
+        android:id="@+id/buttonCalcularDesconto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Calcular Desconto" />
+
+    <TextView
+        android:id="@+id/textViewResultado"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:textSize="18sp" />
+
+</LinearLayout>
+
