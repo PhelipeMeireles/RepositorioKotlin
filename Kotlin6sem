@@ -311,4 +311,118 @@ class MainActivity : AppCompatActivity() {
 
 </LinearLayout>
 
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Consumo de Água (m³):"
+        android:textSize="18sp" />
+
+    <EditText
+        android:id="@+id/editTextConsumo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Digite o consumo em m³"
+        android:inputType="numberDecimal" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Número de Filhos:"
+        android:textSize="18sp"
+        android:layout_marginTop="16dp" />
+
+    <EditText
+        android:id="@+id/editTextFilhos"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Digite o número de filhos"
+        android:inputType="number" />
+
+    <Button
+        android:id="@+id/buttonCalcular"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Calcular" />
+
+    <TextView
+        android:id="@+id/textViewResultado"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:layout_marginTop="16dp" />
+
+</LinearLayout>
+package com.example.calculadoraagua
+
+import android.os.Bundle
+import android.widget.Button
+import android.widget.EditText
+import android.widget.TextView
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+
+class MainActivity : AppCompatActivity() {
+
+    private lateinit var editTextConsumo: EditText
+    private lateinit var editTextFilhos: EditText
+    private lateinit var textViewResultado: TextView
+    private lateinit var buttonCalcular: Button
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        editTextConsumo = findViewById(R.id.editTextConsumo)
+        editTextFilhos = findViewById(R.id.editTextFilhos)
+        textViewResultado = findViewById(R.id.textViewResultado)
+        buttonCalcular = findViewById(R.id.buttonCalcular)
+
+        buttonCalcular.setOnClickListener {
+            calcularConsumo()
+        }
+    }
+
+    private fun calcularConsumo() {
+        val consumoStr = editTextConsumo.text.toString()
+        val filhosStr = editTextFilhos.text.toString()
+
+        if (consumoStr.isEmpty() || filhosStr.isEmpty()) {
+            mostrarMensagem("Por favor, insira valores válidos.")
+            return
+        }
+
+        val consumo = consumoStr.toDouble()
+        val filhos = filhosStr.toInt()
+
+        if (filhos > 4) {
+            mostrarMensagem("Número de filhos não pode ser superior a 4.")
+            return
+        }
+
+        val (valorPorMCubico, descontoPorCriança) = when {
+            consumo <= 10 -> Pair(1.00, 0.10)
+            consumo <= 20 -> Pair(1.50, 0.20)
+            consumo <= 30 -> Pair(2.00, 0.30)
+            else -> Pair(3.00, 0.40)
+        }
+
+        val total = consumo * (valorPorMCubico - (filhos * descontoPorCriança))
+        textViewResultado.text = String.format("Valor Total: R$ %.2f", total)
+    }
+
+    private fun mostrarMensagem(mensagem: String) {
+        Toast.makeText(this, mensagem, Toast.LENGTH_SHORT).show()
+    }
+}
+
+
 
