@@ -225,3 +225,90 @@ class MainActivity : AppCompatActivity() {
 
 </LinearLayout>
 
+package com.example.fretecorrida
+
+import android.os.Bundle
+import android.view.View
+import android.widget.Button
+import android.widget.EditText
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+
+class MainActivity : AppCompatActivity() {
+
+    private lateinit var weightInput: EditText
+    private lateinit var distanceInput: EditText
+    private lateinit var calculateButton: Button
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        weightInput = findViewById(R.id.weightInput)
+        distanceInput = findViewById(R.id.distanceInput)
+        calculateButton = findViewById(R.id.calculateButton)
+
+        calculateButton.setOnClickListener {
+            calculateFreight()
+        }
+    }
+
+    private fun calculateFreight() {
+        val weight = weightInput.text.toString().toDoubleOrNull()
+        val distance = distanceInput.text.toString().toDoubleOrNull()
+
+        if (weight == null || distance == null) {
+            Toast.makeText(this, "Por favor, insira valores válidos.", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val (weightCharge, kmCharge) = when {
+            weight <= 25.0 -> 2.0 to 1.0
+            weight <= 50.0 -> 2.25 to 1.25
+            weight <= 75.0 -> 2.5 to 1.5
+            else -> 3.0 to 2.0
+        }
+
+        val freight = (distance * kmCharge) + (weight * weightCharge)
+
+        Toast.makeText(this, "Valor do Frete: R$ ${String.format("%.2f", freight)}", Toast.LENGTH_LONG).show()
+    }
+}
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Peso do Produto (kg):" />
+
+    <EditText
+        android:id="@+id/weightInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="numberDecimal" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Distância (km):" />
+
+    <EditText
+        android:id="@+id/distanceInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="numberDecimal" />
+
+    <Button
+        android:id="@+id/calculateButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Calcular Frete" />
+
+</LinearLayout>
+
+
